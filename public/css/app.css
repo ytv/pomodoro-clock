@@ -1,68 +1,97 @@
+/* Body */
+
 body {
-    font-size: 30px;
     background-color: #555;
     color: #fff;
+    font-size: 30px;
     font-weight: bold;
-    position: absolute;
-    min-height: 700px;
     height: 100%;
+    min-height: 700px;
     width: 100%;
 }
+
+/* Header */
+
 h1 {
     font-size: 180%;
     font-weight: bold;
 }
-.box {
-    margin: 25px auto;
-}
+
+/* ctl - div that holds both box divs */
+
 .ctl {
     margin-top: 30px;
 }
+
+/* box - div for h2 labels and break/session length */
+
+.box {
+    margin: 25px auto;
+}
+
+/* Buttons */
+
 .btn {
     background: none;
 }
-.circle {
-    border: 10px solid #ddd;
-    border-radius: 150px;
-    height: 300px;
-    width: 300px;
-    margin-top: 30px;
+
+.btn:active {
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #8D54C7;
-    box-shadow: 5px 10px 15px #333,
-                inset 0px 0px 50px #4B2C80;
+        left: 1px;
+        top: 1px;
 }
-#circleLabel {
-    position:relative;
-    margin-top: 75px;
-    font-size: 40px;
-}
-#timer {
-    font-size: 45px;
-}
-.btn:hover, .btn:active, .btn:focus {
-    outline: none !important;
+
+.btn:hover,
+.btn:active,
+.btn:focus {
     box-shadow: none;
     color: #fff;
+    outline: none !important;
 }
-.btn:active{
+
+/* circle - div*/
+
+.circle {
+    background-color: #8D54C7;
+    border: 10px solid #ddd;
+    border-radius: 150px;
+    box-shadow: 5px 10px 15px #333,
+                inset 0px 0px 50px #4B2C80;
+    height: 300px;
+    margin-top: 30px;
     position: relative;
-    top: 1px;
-    left: 1px;
+        left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
 }
+
 .circle:hover {
     border-color: #fff;
 }
+
 .circle:active {
     box-shadow: 5px 10px 15px #333,
-                inset 1px -1px 50px #333;
+                inset 1px -1px 60px #333;
 }
+
+#circleLabel {
+    font-size: 40px;
+    margin-top: 75px;
+    position:relative;
+}
+
+/* timer */
+
+#timer {
+    font-size: 45px;
+}
+
+/* Footer */
+
 footer {
-    position: absolute;
     bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 20px;
+    position: absolute;
+        left: 50%;
+    transform: translateX(-50%);
 }

@@ -4,9 +4,9 @@ $(function() {
 
 var Timer = {
     paused: true,
-    timeTillNext: undefined,
-    timeStarted: undefined,
-    timeRemaining: undefined,
+    timeTillNext: {},
+    timeStarted: {},
+    timeRemaining: {},
     minute: 60 * 1000,
     bell: document.createElement('audio'),
     init: function () {
@@ -17,48 +17,47 @@ var Timer = {
     },
     _bindBtns: function () {
         $('#btn-break-down').on('click', function() {
-            Timer._incremLength('break-len', 'down');
-            Timer._reset();
+          Timer._incremLength('break-len', 'down');
+          Timer._reset();
         });
         $('#btn-break-up').on('click', function() {
-            Timer._incremLength('break-len');
-            Timer._reset();
+          Timer._incremLength('break-len');
+          Timer._reset();
         });
         $('#btn-session-down').on('click', function() {
-            Timer._incremLength('session-len', 'down');
-            Timer._reset();
+          Timer._incremLength('session-len', 'down');
+          Timer._reset();
         });
         $('#btn-session-up').on('click', function() {
-            Timer._incremLength('session-len');
-            Timer._reset();
+          Timer._incremLength('session-len');
+          Timer._reset();
         });
         $('.circle').on('click', function() {
-            if ($('#circleLabel').text() === 'Start')
-                Timer._setCountdown();
-            else {
-                // Pause countdown if it's currently running
-                if(Timer.paused === false) {
-                    // 'Pause' current countdown.  Note: $(id).countdown('pause') just freezes the countdown html displayed,
-                    // but not the actual time.  See https://github.com/hilios/jQuery.countdown/issues/144#issuecomment-146582246)
-                    $("#timer").countdown('pause');
-                    // Clear timer set for next countdown.
-                    clearTimeout(Timer.timeTillNext);
-                    // Calculate the time remaining for current countdown
-                    var timePaused = new Date().getTime();
-                    Timer.timeRemaining = Timer.timeRemaining - (timePaused - Timer.timeStarted);
-                    Timer.paused = true;
-                }
-                // Unpause countdown if it's currently paused
-                else if (Timer.paused === true) {
-                    // Reset current countdown based on time remaining
-                    Timer._countdown(Timer.timeRemaining);
-                    // Reset timer for the next countdown
-                    Timer.timeTillNext = setTimeout( function() {
-                        Timer._setCountdown();
-                    }, Timer.timeRemaining);
-                    Timer.paused = false;
-                }
-            }
+          if ($('#circleLabel').text() === 'Start')
+              Timer._setCountdown();
+          else {
+              // Pause countdown if it's currently running
+              if(Timer.paused === false) {
+                  // 'Pause' current countdown.  Note: $(id).countdown('pause') just freezes the countdown html displayed,
+                  // but not the actual time.  See https://github.com/hilios/jQuery.countdown/issues/144#issuecomment-146582246)
+                  $("#timer").countdown('pause');
+                  // Clear timer set for next countdown.
+                  clearTimeout(Timer.timeTillNext);
+                  // Calculate the time remaining for current countdown
+                  var timePaused = new Date().getTime();
+                  Timer.timeRemaining = Timer.timeRemaining - (timePaused - Timer.timeStarted);
+                  Timer.paused = true;
+              // Unpause countdown if it's currently paused
+              } else {
+                  // Reset current countdown based on time remaining
+                  Timer._countdown(Timer.timeRemaining);
+                  // Reset timer for the next countdown
+                  Timer.timeTillNext = setTimeout( function() {
+                      Timer._setCountdown();
+                  }, Timer.timeRemaining);
+                  Timer.paused = false;
+              }
+          }
         });
     },
     _incremLength: function (locId, direction = 'up') {
