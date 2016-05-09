@@ -1,3 +1,6 @@
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+  }
 /* Body */
 
 body {
@@ -17,15 +20,25 @@ h1 {
     font-weight: bold;
 }
 
+/* Footer */
+
+footer {
+    top: 250px;
+    font-size: 20px;
+    position: relative;
+        left: 50%;
+    transform: translateX(-50%);
+}
+
 /* ctl - div that holds both box divs */
 
-.ctl {
+.box {
     margin-top: 30px;
 }
 
 /* box - div for h2 labels and break/session length */
 
-.box {
+.box--ctrl {
     margin: 25px auto;
 }
 
@@ -84,14 +97,4 @@ h1 {
 
 #timer {
     font-size: 45px;
-}
-
-/* Footer */
-
-footer {
-    bottom: 10px;
-    font-size: 20px;
-    position: absolute;
-        left: 50%;
-    transform: translateX(-50%);
 }

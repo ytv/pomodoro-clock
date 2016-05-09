@@ -1,106 +1,82 @@
-$(function() {
-    Timer.init();
+var app = angular.module('app', []);
+
+app.filter('secondsToTime', function() {
+    return function(seconds) {
+        var d = new Date(0,0,0,0,0,0,0);
+        d.setSeconds(seconds);
+        return d;
+    };
 });
 
-var Timer = {
-    paused: true,
-    timeTillNext: {},
-    timeStarted: {},
-    timeRemaining: {},
-    minute: 60 * 1000,
-    bell: document.createElement('audio'),
-    init: function () {
-        this._bindBtns();
-        // Sound = "glass ping"
-        Timer.bell.setAttribute('src', 'http://soundbible.com/grab.php?id=2084&type=wav');
-        Timer.bell.setAttribute('src', 'http://soundbible.com/grab.php?id=2084&type=mp3');
-    },
-    _bindBtns: function () {
-        $('#btn-break-down').on('click', function() {
-          Timer._incremLength('break-len', 'down');
-          Timer._reset();
-        });
-        $('#btn-break-up').on('click', function() {
-          Timer._incremLength('break-len');
-          Timer._reset();
-        });
-        $('#btn-session-down').on('click', function() {
-          Timer._incremLength('session-len', 'down');
-          Timer._reset();
-        });
-        $('#btn-session-up').on('click', function() {
-          Timer._incremLength('session-len');
-          Timer._reset();
-        });
-        $('.circle').on('click', function() {
-          if ($('#circleLabel').text() === 'Start')
-              Timer._setCountdown();
-          else {
-              // Pause countdown if it's currently running
-              if(Timer.paused === false) {
-                  // 'Pause' current countdown.  Note: $(id).countdown('pause') just freezes the countdown html displayed,
-                  // but not the actual time.  See https://github.com/hilios/jQuery.countdown/issues/144#issuecomment-146582246)
-                  $("#timer").countdown('pause');
-                  // Clear timer set for next countdown.
-                  clearTimeout(Timer.timeTillNext);
-                  // Calculate the time remaining for current countdown
-                  var timePaused = new Date().getTime();
-                  Timer.timeRemaining = Timer.timeRemaining - (timePaused - Timer.timeStarted);
-                  Timer.paused = true;
-              // Unpause countdown if it's currently paused
-              } else {
-                  // Reset current countdown based on time remaining
-                  Timer._countdown(Timer.timeRemaining);
-                  // Reset timer for the next countdown
-                  Timer.timeTillNext = setTimeout( function() {
-                      Timer._setCountdown();
-                  }, Timer.timeRemaining);
-                  Timer.paused = false;
-              }
-          }
-        });
-    },
-    _incremLength: function (locId, direction = 'up') {
-        var currLen = Number($('#' + locId).text());
-        var d = 1;
-        if (direction === 'down')
-            d = -1;
-        currLen = Math.max(0, currLen + d);
-        $('#' + locId).html(currLen);
-    },
-    // Set countdown.  Parameter 'length' is in ms
-    _countdown: function (timeRemaining) {
-        Timer.timeStarted = new Date().getTime();
-        var endTime = new Date().setTime(Timer.timeStarted + timeRemaining);
-        $("#timer").countdown(endTime, function(event) {
-            $(this).text(event.strftime('%H:%M:%S'));
-        });
-        // Only play bell if the Timer._countdown function was called due to a swap between
-        // session and break, not if it was called to unpause.
-        if(Timer.paused === false)
-            Timer.bell.play();
-        Timer.paused = false;
-    },
-    _setCountdown: function(lenLocId, breakLabel) {
-        // Set variables
-        var label = $('#circleLabel').text() ;
-        var lenLocId = (label === 'Start' || label === 'Break') ? '#session-len': '#break-len';
-        var breakLabel = (label === 'Start' || label === 'Break') ? 'Session': 'Break';
-        // Set up countdown
-        Timer.timeRemaining = Number($(lenLocId).text()) * Timer.minute;
-        $('#circleLabel').html(breakLabel);
-        Timer._countdown(Timer.timeRemaining);
-        // Set timer for the following countdown
-        Timer.timeTillNext = setTimeout( function() {
-            Timer._setCountdown();
-        }, Timer.timeRemaining);
-    },
-    _reset: function() {
-        $('#circleLabel').html('Start');
-        clearTimeout(Timer.timeTillNext);
-        if(Timer.paused === false)
-            $('#timer').countdown('stop');
-        $('#timer').html('00:00:00');
-        Timer.paused = true;
+app.controller('ctrl', function($scope, $timeout) {
+    // Initialize variables
+    var minute = 60;
+    var paused = true;
+    var bell= document.createElement('audio');
+    bell.setAttribute('src', 'http://soundbible.com/grab.php?id=2084&type=wav');
+
+    $scope.length = {
+        break: 5,
+        session: 25
+    };
+    $scope.labels = {
+        start: 'Start',
+        session: 'Session',
+        break: 'Break'
+    };
+    $scope.timerLabel = $scope.labels.start;
+    $scope.timer = $scope.length.session * minute;
+
+    // Acts as the "control" for the countdown, determining the countdown's behavior
+    // everytime it's clicked on (i.e. starting, pausing,and resuming)
+    $scope.timerControl = function () {
+        // start countdown
+        if($scope.timerLabel === $scope.labels.start && paused === true) {
+            $scope.setUpNextCountdown($scope.length.session * minute, $scope.labels.session);
+        // pause countdown
+        } else if(paused === false) {
+            $timeout.cancel(countdown);
+            paused = true;
+        // resume countdown
+        } else {
+            $scope.countdown();
+            paused = false;
+        }
+    };
+
+    // Re-initializes variables for the next countdown
+    $scope.setUpNextCountdown = function(length, label) {
+        $scope.timer = length;
+        $scope.timerLabel = label;
+        $scope.countdown();
+        bell.play();
+        paused = false;
+    };
+
+    // Function for the actual countdown
+    var countdown;
+    $scope.countdown = function() {
+        countdown = $timeout(function () {
+            $scope.timer--;
+            if ($scope.timer > 0)
+                $scope.countdown();
+            // Calls set up for the next countdown
+            else {
+                $timeout.cancel(countdown);
+                if($scope.timerLabel === $scope.labels.session) {
+                    $scope.setUpNextCountdown($scope.length.break * minute, $scope.labels.break);
+                } else {
+                    $scope.setUpNextCountdown($scope.length.session * minute, $scope.labels.session);
+                }
+            }
+        }, 1000);
+    };
+
+    // Resets variables and countdown
+    $scope.reset = function() {
+        $timeout.cancel(countdown);
+        $scope.timerLabel = "Start";
+        $scope.timer = 0;
+        paused = true;
     }
-}
+});

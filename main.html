@@ -1,70 +1,63 @@
 <!DOCTYPE html>
-<html>
-    <meta name="viewport" content="width = device-width, initial-scale = 1">
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-    <link rel="stylesheet" href="public/css/app.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="https://rawgithub.com/hilios/jQuery.countdown/master/dist/jquery.countdown.min.js"></script>
-    <script src="public/js/app.js"></script>
-<head>
-    <title>Pomodoro Clock</title>
-</head>
-<body>
-    <div class="container">
-        <div class="row">
+<html ng-app="app">
+    <head>
+        <meta name="viewport" content="width = device-width, initial-scale = 1">
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+        <link rel="stylesheet" href="public/css/app.css">
+        <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+        <script src="public/js/app.js"></script>
+        <title>Pomodoro Clock</title>
+    </head>
+    <body>
+        <div class="container" ng-controller='ctrl'>
+            <h1 class="text-center">Pomodoro Clock</h1>
+            <div class="col-xs-12 text-center box">
+                <div class="col-xs-6 box--ctrl">
+                    <h2>{{ labels.break }} Length</h2>
+                    <div>
+                        <span>
+                            <button type="button" class="btn"
+                             ng-click="length.break = length.break - 1; reset()">
+                                <i class="fa fa-caret-down fa-lg"></i>
+                            </button>
+                        </span>
+                        <span>{{ length.break }}</span>
+                        <span>
+                            <button type="button" class="btn"
+                             ng-click="length.break = length.break + 1; reset()">
+                                <i class="fa fa-caret-up fa-lg"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-6 box--ctrl">
+                    <h2>{{ labels.session }} Length</h2>
+                    <div>
+                        <span>
+                            <button type="button" class="btn"
+                             ng-click="length.session = length.session - 1; reset()">
+                                <i class="fa fa-caret-down fa-lg"></i>
+                            </button>
+                        </span>
+                        <span>{{ length.session }}</span>
+                        <span>
+                            <button type="button" class="btn"
+                             ng-click="length.session = length.session + 1; reset()">
+                                <i class="fa fa-caret-up fa-lg"></i></button>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
             <div class="col-xs-12 text-center">
-                <div class="title">
-                    <h1>Pomodoro Clock</h1>
+                <div class="circle" ng-click="timerControl()">
+                    <div id="circleLabel">{{ timerLabel }}</div>
+                    <div id="timer">{{ timer | secondsToTime | date:'HH:mm:ss'}}</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-md-offset-1 col-xs-12 text-center ctl">
-            <div class="col-md-12 col-xs-6 box">
-                <div>
-                    <h2>Break Length</h2>
-                </div>
-                <div class="lenCtl">
-                    <span>
-                        <button type="button" class="btn" id="btn-break-down">
-                            <i class="fa fa-caret-down fa-lg"></i></button>
-                        </button>
-                    </span>
-                    <span id="break-len">5</span>
-                    <span>
-                        <button type="button" class="btn" id="btn-break-up">
-                            <i class="fa fa-caret-up fa-lg"></i></button>
-                        </button>
-                    </span>
-                </div>
-            </div>
-            <div class="col-md-12 col-xs-6 box">
-                <div>
-                    <h2>Session Length</h2>
-                </div>
-                <div class="lenCtl">
-                    <span>
-                        <button type="button" class="btn" id="btn-session-down">
-                            <i class="fa fa-caret-down fa-lg"></i>
-                        </button>
-                    </span>
-                    <span id="session-len">25</span>
-                    <span>
-                        <button type="button" class="btn" id="btn-session-up">
-                            <i class="fa fa-caret-up fa-lg"></i></button>
-                        </button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-7 col-xs-12 text-center">
-            <div class="circle">
-                <div id="circleLabel">Start</div>
-                <div id="timer">00:00:00</div>
-            </div>
-        </div>
-    </div>
-    <footer class="text-center">by ytv</footer>
-</body>
+
+        <footer class="text-center">by ytv</footer>
+    </body>
 </html>
