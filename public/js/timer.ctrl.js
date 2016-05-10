@@ -1,10 +1,10 @@
 app.controller('TimerCtrl', function($scope, $timeout) {
     // Initialize variables
-    var minute = 1;
+    var minute = 60;
     var paused = true;
     var bell= document.createElement('audio');
     bell.setAttribute('src', 'http://soundbible.com/grab.php?id=2084&type=wav');
-    $scope.mute = false;    
+    $scope.mute = false;
 
     $scope.length = {
         break: 5,
