@@ -1,19 +1,10 @@
-var app = angular.module('app', []);
-
-app.filter('secondsToTime', function() {
-    return function(seconds) {
-        var d = new Date(0,0,0,0,0,0,0);
-        d.setSeconds(seconds);
-        return d;
-    };
-});
-
-app.controller('ctrl', function($scope, $timeout) {
+app.controller('TimerCtrl', function($scope, $timeout) {
     // Initialize variables
-    var minute = 60;
+    var minute = 1;
     var paused = true;
     var bell= document.createElement('audio');
     bell.setAttribute('src', 'http://soundbible.com/grab.php?id=2084&type=wav');
+    $scope.mute = false;    
 
     $scope.length = {
         break: 5,
@@ -27,6 +18,14 @@ app.controller('ctrl', function($scope, $timeout) {
     $scope.timerLabel = $scope.labels.start;
     $scope.timer = $scope.length.session * minute;
 
+    $scope.increment = function(lengthProperty) {
+        $scope.length[lengthProperty]++;
+    };
+
+    $scope.decrement = function(lengthProperty) {
+        $scope.length[lengthProperty] = Math.max(1, $scope.length[lengthProperty] - 1);
+    };
+
     // Acts as the "control" for the countdown, determining the countdown's behavior
     // everytime it's clicked on (i.e. starting, pausing,and resuming)
     $scope.timerControl = function () {
@@ -39,7 +38,7 @@ app.controller('ctrl', function($scope, $timeout) {
             paused = true;
         // resume countdown
         } else {
-            $scope.countdown();
+            $scope.renderCountdown();
             paused = false;
         }
     };
@@ -48,18 +47,19 @@ app.controller('ctrl', function($scope, $timeout) {
     $scope.setUpNextCountdown = function(length, label) {
         $scope.timer = length;
         $scope.timerLabel = label;
-        $scope.countdown();
-        bell.play();
+        $scope.renderCountdown();
+        if($scope.mute === false)
+            bell.play();
         paused = false;
     };
 
     // Function for the actual countdown
     var countdown;
-    $scope.countdown = function() {
+    $scope.renderCountdown = function() {
         countdown = $timeout(function () {
             $scope.timer--;
             if ($scope.timer > 0)
-                $scope.countdown();
+                $scope.renderCountdown();
             // Calls set up for the next countdown
             else {
                 $timeout.cancel(countdown);
@@ -78,5 +78,10 @@ app.controller('ctrl', function($scope, $timeout) {
         $scope.timerLabel = "Start";
         $scope.timer = 0;
         paused = true;
-    }
+    };
+
+    // Mutes bell
+    $scope.toggleMute = function() {
+        ($scope.mute === false) ? $scope.mute = true : $scope.mute = false;
+    };
 });
