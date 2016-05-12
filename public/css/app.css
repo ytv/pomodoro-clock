@@ -21,13 +21,13 @@ h1 {
 }
 /* Footer */
 
-footer {
+/*footer {
     top: 250px;
     font-size: 22px;
     position: relative;
         left: 50%;
     transform: translateX(-50%);
-}
+}*/
 
 /* ctl - div that holds both box divs */
 
@@ -96,13 +96,42 @@ button:focus {
 
 /* timer */
 
-#timerLabel {
+#timerLabel, #timer {
     font-size: 45px;
     color: #fff;
-    /*margin-top: -20px;*/
 }
 
-#timer {
-    font-size: 45px;
-    color: #fff;
+/*-----media-----*/
+@media screen and (max-width: 435px){
+    body {
+        font-size: 25px;
+    }
+    /*footer{
+        top: 120px;
+        bottom: 0;
+        font-size: 18px;
+    }*/
+    h1 {
+        font-size: 40px;
+        font-weight: bold;
+    }
+    h2 {
+        font-size: 25px;
+    }
+    .box {
+        margin-top: 5px;
+    }
+    .timerContainer {
+        width: 250px;
+        height: 250px;
+    }
+    .btn {
+        padding: 3px;
+    }
+    .fa-times {
+        font-size: 10px;
+    }
+    #timerLabel, #timer {
+        font-size: 40px;
+    }
 }
