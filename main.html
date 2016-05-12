@@ -24,7 +24,7 @@
                     <!--Box div for selecting break and session lengths -->
                     <div class="col-xs-12 box">
                         <div class="col-xs-6 box__content">
-                            <h2>{{ labels.break }} Length</h2>
+                            <h2>{{ labels.break }}<br>Length</h2>
                             <div>
                                 <span>
                                     <button type="button" class="btn"
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="col-xs-6 box__content">
-                            <h2>{{ labels.session }} Length</h2>
+                            <h2>{{ labels.session }}<br>Length</h2>
                             <div>
                                 <span>
                                     <button type="button" class="btn"
@@ -69,7 +69,7 @@
                     </div>
                     <!--Timer remove and volume buttons -->
                     <div class="col-xs-12">
-                        <button type="button" class="remove-btn" ng-click="removeTimer(countdownTimer.index)">
+                        <button type="button" class="remove-btn" ng-click="removeTimer(countdownTimer)">
                             <i class="fa fa-remove"></i>
                         </button>
                         <button type="button" class="volume-btn" ng-click="toggleMute()">
@@ -81,6 +81,6 @@
                 </div> <!--TimerCtrl -->
             </div> <!--countdownTimer in countdownTimers div> -->
         </div> <!--container -->
-        <footer>by ytv</footer>
+        <!-- <footer>by ytv</footer> -->
     </body>
 </html>
